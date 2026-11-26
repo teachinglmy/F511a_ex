@@ -1,0 +1,2667 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="分數乘以整數在家練習">
+  <meta name="theme-color" content="#E4F4FF">
+  <title>小學五年級數學：分數 × 整數 在家自主練習版</title>
+  <style>
+    /* =====================================================================
+       1. 設計系統與清新明亮學習配色變數
+       ===================================================================== */
+    :root {
+      color-scheme: light;
+      --ink: #16324a;
+      --muted: #5c7388;
+      --blue: #0b74d1;
+      --blue-bright: #2ea0ff;
+      --orange: #e36a12;
+      --orange-bright: #ff8c3a;
+      --amber: #d97706;
+      --amber-bg: #fffbeb;
+      --green: #149e63;
+      --green-bg: #e6f8ef;
+      --red: #d93848;
+      --red-bg: #ffecee;
+      --line: #1a3654;
+      --card: #ffffff;
+      --sky: #e4f4ff;
+      --panel: #f3f8fc;
+      --border: #d5e3ef;
+      --empty: #e7f1f8;
+      --shadow: 0 12px 30px rgba(28, 84, 130, 0.1);
+    }
+
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+
+    html, body {
+      margin: 0;
+      height: 100%;
+      background: var(--sky);
+      color: var(--ink);
+      font-family: "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", "Heiti TC", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      min-height: 100dvh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* 背景柔和幾何圓形裝飾 */
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      z-index: 0;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    body::before {
+      width: 380px;
+      height: 380px;
+      right: -120px;
+      top: -140px;
+      background: rgba(255, 196, 110, 0.45);
+    }
+    body::after {
+      width: 340px;
+      height: 340px;
+      left: -120px;
+      bottom: -150px;
+      background: rgba(110, 196, 255, 0.42);
+    }
+
+    button, input { font: inherit; color: inherit; }
+    button {
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      user-select: none;
+      transition: transform 0.12s ease, box-shadow 0.15s ease, background-color 0.15s ease, opacity 0.15s ease;
+    }
+    button:active:not(:disabled) { transform: scale(0.98); }
+    button:disabled { opacity: 0.48; cursor: not-allowed; }
+    button:focus-visible, input:focus-visible {
+      outline: 3px solid var(--blue-bright);
+      outline-offset: 2px;
+    }
+
+    .app-view {
+      position: relative;
+      z-index: 1;
+      height: 100dvh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      padding: max(12px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+    }
+
+    /* =====================================================================
+       2. 在家練習開始畫面（START VIEW）
+       ===================================================================== */
+    .start-view {
+      justify-content: center;
+      align-items: center;
+      overflow-y: auto;
+    }
+    .start-shell {
+      width: 100%;
+      max-width: 720px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin: auto;
+    }
+    .hero { text-align: center; }
+    .eyebrow {
+      margin: 0;
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: 850;
+      letter-spacing: 0.08em;
+    }
+    .hero h1 {
+      margin: 4px 0 6px;
+      font-size: clamp(26px, 4vw, 40px);
+      line-height: 1.15;
+    }
+    .lede {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      font-weight: 650;
+    }
+
+    .welcome-card {
+      background: var(--card);
+      border-radius: 26px;
+      padding: 24px 26px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      border-top: 7px solid var(--blue-bright);
+    }
+    .badge-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .role-badge {
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 850;
+      background: #e7f3ff;
+      color: var(--blue);
+    }
+    .role-badge.gold-hint {
+      background: #fef3c7;
+      color: #b45309;
+    }
+
+    .rule-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      background: var(--panel);
+      padding: 14px;
+      border-radius: 16px;
+    }
+    .rule-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 13.5px;
+      font-weight: 750;
+      line-height: 1.45;
+      color: var(--ink);
+    }
+    .rule-icon {
+      font-size: 18px;
+      line-height: 1.2;
+      flex: none;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 12px;
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .field label {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--muted);
+    }
+    .field input {
+      width: 100%;
+      height: 48px;
+      padding: 0 14px;
+      border-radius: 14px;
+      border: 2px solid var(--border);
+      background: #fff;
+      font-size: 18px;
+      font-weight: 800;
+    }
+    .field input:focus {
+      border-color: var(--blue-bright);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(46, 160, 255, 0.22);
+    }
+
+    /* 通用按鈕樣式 */
+    .btn-primary {
+      height: 50px;
+      padding: 0 18px;
+      border: none;
+      border-radius: 15px;
+      background: var(--blue);
+      color: #fff;
+      font-size: 17px;
+      font-weight: 850;
+      box-shadow: 0 8px 18px rgba(11, 116, 209, 0.25);
+    }
+    .btn-primary:hover:not(:disabled) { background: #0963b3; }
+    .btn-orange {
+      background: var(--orange);
+      box-shadow: 0 8px 18px rgba(227, 106, 18, 0.25);
+    }
+    .btn-orange:hover:not(:disabled) { background: #c95a0b; }
+    .btn-green {
+      background: var(--green);
+      box-shadow: 0 8px 18px rgba(20, 158, 99, 0.25);
+    }
+    .btn-green:hover:not(:disabled) { background: #108452; }
+    .btn-amber {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: #fff;
+      box-shadow: 0 8px 18px rgba(217, 119, 6, 0.28);
+    }
+    .btn-amber:hover:not(:disabled) { filter: brightness(0.95); }
+    .btn-soft {
+      height: 38px;
+      padding: 0 13px;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      background: #fff;
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--ink);
+    }
+    .btn-soft:hover:not(:disabled) { background: var(--panel); }
+
+    /* =====================================================================
+       3. 頂部進度列與 20 題導航列
+       ===================================================================== */
+    .topbar {
+      flex: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      background: var(--card);
+      padding: 9px 14px;
+      border-radius: 18px;
+      box-shadow: 0 6px 20px rgba(28, 84, 130, 0.08);
+      margin-bottom: 10px;
+    }
+    .topbar-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .topbar-left, .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .student-tag {
+      padding: 5px 12px;
+      border-radius: 11px;
+      background: #e7f3ff;
+      color: var(--blue);
+      font-weight: 850;
+      font-size: 14px;
+    }
+    .progress-pill {
+      padding: 5px 12px;
+      border-radius: 11px;
+      background: var(--green-bg);
+      color: var(--green);
+      font-weight: 850;
+      font-size: 14px;
+      font-variant-numeric: tabular-nums;
+    }
+    .hint-stat-pill {
+      padding: 5px 12px;
+      border-radius: 11px;
+      background: #fef3c7;
+      color: #b45309;
+      font-weight: 850;
+      font-size: 14px;
+      font-variant-numeric: tabular-nums;
+    }
+    .hint-stat-pill.zero {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      color: #92400e;
+      border: 1.5px solid #f59e0b;
+    }
+
+    /* 20 題題號切換列 */
+    .q-nav-strip {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+      scrollbar-width: thin;
+    }
+    .q-num-pill {
+      flex: none;
+      min-width: 34px;
+      height: 32px;
+      padding: 0 7px;
+      border-radius: 10px;
+      border: 2px solid var(--border);
+      background: #fff;
+      font-size: 13px;
+      font-weight: 850;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      position: relative;
+      font-variant-numeric: tabular-nums;
+    }
+    .q-num-pill.active {
+      border-color: var(--blue);
+      background: var(--blue);
+      color: #fff;
+    }
+    .q-num-pill.done:not(.active) {
+      border-color: #7cd8ae;
+      background: var(--green-bg);
+      color: var(--green);
+    }
+    .q-num-pill.used-hint::after {
+      content: "💡";
+      font-size: 9px;
+      position: absolute;
+      top: -5px;
+      right: -4px;
+      line-height: 1;
+    }
+
+    /* =====================================================================
+       4. 學生練習工作區（左側題目與錦囊模型區 + 右側分步操作）
+       ===================================================================== */
+    .student-body {
+      flex: 1;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1.42fr) minmax(310px, 0.88fr);
+      gap: 12px;
+    }
+    .panel-card {
+      background: var(--card);
+      border-radius: 22px;
+      padding: 14px 16px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      overflow: hidden;
+    }
+    .q-header {
+      flex: none;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--panel);
+    }
+    .q-title-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .q-index-label {
+      font-size: 13px;
+      font-weight: 850;
+      color: var(--blue);
+    }
+    .q-type-pill {
+      flex: none;
+      padding: 4px 11px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      font-weight: 850;
+      background: #e7f3ff;
+      color: var(--blue);
+    }
+    .q-type-pill.word {
+      background: #fff0e3;
+      color: var(--orange);
+    }
+    .q-prompt {
+      margin: 0;
+      font-size: clamp(18px, 2.05vw, 23px);
+      font-weight: 850;
+      line-height: 1.45;
+      color: var(--ink);
+    }
+    .math-inline {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: clamp(24px, 2.8vw, 32px);
+      font-weight: 900;
+    }
+
+    /* 標準上下垂直分數線排版 */
+    .vfrac {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      vertical-align: middle;
+      line-height: 1.05;
+      margin: 0 3px;
+      font-variant-numeric: tabular-nums;
+    }
+    .vfrac .n {
+      padding: 0 6px 2px;
+      border-bottom: 2.5px solid currentColor;
+    }
+    .vfrac .d {
+      padding: 2px 6px 0;
+    }
+
+    /* 長條模型視覺化舞台 */
+    .model-stage {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-top: 8px;
+    }
+    .stage-banner {
+      flex: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+      background: var(--panel);
+      padding: 8px 12px;
+      border-radius: 14px;
+    }
+    .stage-title {
+      font-size: 14px;
+      font-weight: 850;
+      color: var(--ink);
+    }
+    .stage-legend {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--muted);
+    }
+    .svg-viewport {
+      flex: 1;
+      min-height: 165px;
+      position: relative;
+      background: #fafdff;
+      border: 2px dashed #cfe2f2;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 12px;
+      transition: border-color 0.2s ease, background-color 0.2s ease;
+    }
+    .svg-viewport.active-model {
+      border-style: solid;
+      border-color: #d7e7f5;
+      background: #ffffff;
+    }
+    .svg-viewport.hint-standby {
+      background: linear-gradient(180deg, #fffdf5 0%, #fffbeb 100%);
+      border-color: #fcd34d;
+    }
+    .svg-viewport svg {
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      max-height: 100%;
+      display: block;
+      animation: modelPop 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    @keyframes modelPop {
+      from { opacity: 0.4; transform: scale(0.97); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .hint-gate-box {
+      text-align: center;
+      max-width: 440px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+    }
+    .hint-gate-box .icon {
+      font-size: 40px;
+      line-height: 1;
+    }
+    .hint-gate-box h3 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 900;
+      color: #92400e;
+    }
+    .hint-gate-box p {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 750;
+      color: #78350f;
+      line-height: 1.5;
+    }
+    .btn-use-hint {
+      height: 46px;
+      padding: 0 20px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: #fff;
+      font-size: 15.5px;
+      font-weight: 900;
+      box-shadow: 0 8px 18px rgba(217, 119, 6, 0.28);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-use-hint:hover {
+      filter: brightness(0.96);
+    }
+
+    /* 即時算式推演鏈（Chain Bar） */
+    .chain-bar {
+      flex: none;
+      min-height: 54px;
+      background: #f3f8fc;
+      border-radius: 14px;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px 10px;
+      font-size: 19px;
+      font-weight: 850;
+    }
+    .chain-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 10px;
+      background: #fff;
+      box-shadow: 0 2px 6px rgba(22, 50, 74, 0.06);
+    }
+    .chain-chip.highlight-reduce {
+      background: #fff2e6;
+      color: var(--orange);
+      border: 1.5px solid #ffc799;
+    }
+    .chain-chip.highlight-mixed {
+      background: #e6f8ef;
+      color: var(--green);
+      border: 1.5px solid #96e2be;
+    }
+    .chain-chip .cancel-old-val {
+      font-size: 15px;
+      margin-right: 2px;
+    }
+    .chain-chip .cancel-new-val {
+      font-size: 19px;
+      font-weight: 900;
+    }
+
+    /* 假分數轉帶分數「思考雲朵」樣式（僅開啟錦囊後顯示） */
+    .thought-cloud-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+    }
+    .thought-dots {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .thought-dots i {
+      display: inline-block;
+      border-radius: 50%;
+      background: #bae0ff;
+      border: 1.5px solid #5bb2f8;
+    }
+    .thought-dots i:first-child { width: 7px; height: 7px; }
+    .thought-dots i:last-child { width: 11px; height: 11px; }
+    .thought-cloud {
+      position: relative;
+      display: inline-flex;
+      flex-direction: column;
+      gap: 3px;
+      padding: 8px 14px;
+      border-radius: 22px;
+      background: linear-gradient(180deg, #ffffff 0%, #eef8ff 100%);
+      border: 2px solid #6cbbf9;
+      box-shadow: 0 4px 12px rgba(46, 160, 255, 0.14), inset 0 2px 0 #ffffff;
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 800;
+    }
+    .thought-cloud-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      font-weight: 900;
+      color: var(--blue);
+    }
+    .thought-cloud-math {
+      display: inline-flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 4px;
+      font-size: 16px;
+      font-weight: 850;
+      color: var(--ink);
+    }
+    .thought-cloud-box {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 20px;
+      background: linear-gradient(180deg, #ffffff 0%, #eef8ff 100%);
+      border: 2px solid #6cbbf9;
+      box-shadow: 0 4px 12px rgba(46, 160, 255, 0.12);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      text-align: center;
+    }
+
+    /* 右側分步操作面板 */
+    .controls-col {
+      overflow-y: auto;
+      gap: 10px;
+    }
+    .step-box {
+      background: var(--panel);
+      border-radius: 16px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      border: 2px solid transparent;
+      transition: all 0.2s ease;
+    }
+    .step-box.current {
+      border-color: var(--blue-bright);
+      background: #f6fbff;
+    }
+    .step-box.completed {
+      border-color: #96e2be;
+      background: #f4fcf8;
+    }
+    .step-box.locked {
+      opacity: 0.52;
+      pointer-events: none;
+    }
+    .step-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .step-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      font-weight: 850;
+    }
+    .step-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--blue-bright);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-size: 13px;
+      font-weight: 900;
+      flex: none;
+    }
+    .step-box.completed .step-num { background: var(--green); }
+
+    /* 分數與帶分數輸入元件 */
+    .expr-builder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 4px 0;
+    }
+    .frac-input-stack {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      width: 72px;
+    }
+    .num-box {
+      width: 68px;
+      height: 46px;
+      border-radius: 12px;
+      border: 2px solid var(--border);
+      background: #fff;
+      text-align: center;
+      font-size: 22px;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+    }
+    .num-box:focus {
+      border-color: var(--blue-bright);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(46, 160, 255, 0.25);
+    }
+    .frac-bar-line {
+      width: 100%;
+      height: 3px;
+      border-radius: 2px;
+      background: var(--ink);
+    }
+    .op-symbol {
+      font-size: 26px;
+      font-weight: 900;
+      color: var(--muted);
+    }
+    .mixed-builder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .whole-box {
+      width: 66px;
+      height: 58px;
+      font-size: 26px;
+    }
+
+    .feedback-msg {
+      margin: 0;
+      padding: 9px 11px;
+      border-radius: 11px;
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.45;
+    }
+    .feedback-msg.ok { background: var(--green-bg); color: var(--green); }
+    .feedback-msg.err { background: var(--red-bg); color: var(--red); }
+    .feedback-msg.info { background: #e7f3ff; color: var(--blue); }
+
+    /* 點選數字約簡算式卡片 */
+    .cancel-workspace {
+      background: #ffffff;
+      border: 2px solid #ffd2a8;
+      border-radius: 14px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .cancel-frac-box {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+    }
+    .cancel-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .cancel-num-btn {
+      min-width: 58px;
+      min-height: 44px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      border: 2.5px solid #cbdbe8;
+      background: #f8fbfe;
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--ink);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      font-variant-numeric: tabular-nums;
+    }
+    .cancel-num-btn:hover:not(:disabled) {
+      border-color: var(--orange-bright);
+      background: #fff7ef;
+    }
+    .cancel-num-btn.selected {
+      border-color: var(--orange);
+      background: #ffedd8;
+      color: var(--orange);
+      box-shadow: 0 0 0 3px rgba(227, 106, 18, 0.25);
+      transform: scale(1.04);
+    }
+    .cancel-num-btn.reduced-done {
+      border-color: #96e2be;
+      background: #f2fbf7;
+    }
+    .cancel-old-val {
+      font-size: 16px;
+      font-weight: 800;
+      color: #e11d48;
+      text-decoration: line-through;
+      text-decoration-thickness: 2.5px;
+    }
+    .cancel-new-val {
+      font-size: 23px;
+      font-weight: 900;
+      color: var(--green);
+    }
+    .divisor-choice-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 12px;
+      background: #fff5eb;
+      border: 1.5px solid #ffd2a8;
+    }
+    .divisor-box {
+      width: 54px;
+      height: 40px;
+      border-radius: 10px;
+      border: 2.5px solid var(--orange);
+      background: #ffffff;
+      text-align: center;
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--orange);
+      font-variant-numeric: tabular-nums;
+    }
+    .divisor-box::placeholder {
+      color: var(--orange);
+      opacity: 0.75;
+    }
+    .divisor-box:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(227, 106, 18, 0.25);
+    }
+    .btn-divisor {
+      height: 40px;
+      padding: 0 14px;
+      border: none;
+      border-radius: 10px;
+      background: var(--orange);
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 850;
+    }
+    .btn-divisor:hover {
+      background: #c95a0b;
+    }
+
+    /* =====================================================================
+       5. 未約至最簡彈出視窗 & 通關證書（金版 / 銀版）
+       ===================================================================== */
+    .warn-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 90;
+      background: rgba(15, 35, 54, 0.65);
+      backdrop-filter: blur(3px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+    }
+    .warn-modal-card {
+      width: 100%;
+      max-width: 440px;
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 24px 22px;
+      border-top: 8px solid var(--orange);
+      box-shadow: 0 24px 55px rgba(10, 25, 42, 0.35);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      animation: modelPop 0.22s ease;
+    }
+    .warn-modal-card .warn-icon {
+      font-size: 46px;
+      line-height: 1;
+    }
+    .warn-modal-card h3 {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--orange);
+    }
+    .warn-modal-card p {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 750;
+      line-height: 1.5;
+      color: var(--ink);
+    }
+
+    /* 通關證書模態框 */
+    .cert-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 95;
+      background: rgba(12, 28, 45, 0.72);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      overflow-y: auto;
+    }
+    .cert-shell {
+      width: 100%;
+      max-width: 680px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: auto;
+      animation: modelPop 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* 金色主題證書（0 題用錦囊） */
+    .certificate-paper.gold {
+      background: radial-gradient(circle at top center, #fffdf4 0%, #fef3c7 55%, #fde68a 100%);
+      border: 8px solid #d97706;
+      box-shadow: 0 24px 60px rgba(180, 83, 9, 0.45), inset 0 0 0 4px #fbbf24;
+      color: #78350f;
+    }
+    .certificate-paper.gold .cert-inner-border {
+      border: 2.5px dashed #d97706;
+    }
+    .certificate-paper.gold .cert-ribbon {
+      background: linear-gradient(135deg, #f59e0b 0%, #b45309 100%);
+      color: #ffffff;
+    }
+    .certificate-paper.gold .cert-title {
+      color: #92400e;
+    }
+    .certificate-paper.gold .cert-name-line {
+      border-bottom-color: #d97706;
+      color: #451a03;
+    }
+    .certificate-paper.gold .cert-hint-box {
+      background: rgba(255, 255, 255, 0.85);
+      border: 2px solid #f59e0b;
+      color: #92400e;
+    }
+
+    /* 銀色主題證書（>= 1 題用錦囊） */
+    .certificate-paper.silver {
+      background: radial-gradient(circle at top center, #ffffff 0%, #f1f5f9 55%, #e2e8f0 100%);
+      border: 8px solid #64748b;
+      box-shadow: 0 24px 60px rgba(30, 41, 59, 0.45), inset 0 0 0 4px #cbd5e1;
+      color: #1e293b;
+    }
+    .certificate-paper.silver .cert-inner-border {
+      border: 2.5px dashed #64748b;
+    }
+    .certificate-paper.silver .cert-ribbon {
+      background: linear-gradient(135deg, #64748b 0%, #334155 100%);
+      color: #ffffff;
+    }
+    .certificate-paper.silver .cert-title {
+      color: #1e293b;
+    }
+    .certificate-paper.silver .cert-name-line {
+      border-bottom-color: #64748b;
+      color: #0f172a;
+    }
+    .certificate-paper.silver .cert-hint-box {
+      background: rgba(255, 255, 255, 0.9);
+      border: 2px solid #94a3b8;
+      color: #334155;
+    }
+
+    .certificate-paper {
+      border-radius: 26px;
+      padding: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+    .cert-inner-border {
+      border-radius: 18px;
+      padding: 24px 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 12px;
+    }
+    .cert-medal {
+      font-size: 56px;
+      line-height: 1;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
+    }
+    .cert-ribbon {
+      padding: 5px 18px;
+      border-radius: 999px;
+      font-size: 13.5px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+    }
+    .cert-title {
+      margin: 0;
+      font-size: clamp(26px, 4.2vw, 36px);
+      font-weight: 900;
+      letter-spacing: 0.06em;
+    }
+    .cert-subtitle {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 800;
+      opacity: 0.85;
+    }
+    .cert-name-wrap {
+      margin: 4px 0;
+      font-size: 18px;
+      font-weight: 800;
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .cert-name-line {
+      display: inline-block;
+      min-width: 180px;
+      padding: 2px 16px 4px;
+      border-bottom: 3px solid;
+      font-size: clamp(24px, 3.6vw, 32px);
+      font-weight: 900;
+    }
+    .cert-body-text {
+      margin: 0;
+      max-width: 520px;
+      font-size: 15.5px;
+      font-weight: 750;
+      line-height: 1.6;
+    }
+    .cert-hint-box {
+      padding: 10px 22px;
+      border-radius: 16px;
+      font-size: 19px;
+      font-weight: 900;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .cert-footer {
+      width: 100%;
+      margin-top: 6px;
+      padding-top: 12px;
+      border-top: 1.5px solid rgba(100, 116, 139, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13.5px;
+      font-weight: 800;
+      opacity: 0.85;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .cert-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* 底部輕量提示條 */
+    .toast {
+      position: fixed;
+      z-index: 100;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%) translateY(12px);
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: var(--ink);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 800;
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.2s ease;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* 響應式適配（iPad 直向 / 平板 / 手機） */
+    @media (max-width: 900px) {
+      .rule-grid, .form-row { grid-template-columns: 1fr; }
+      .student-body {
+        grid-template-columns: 1fr;
+        grid-template-rows: minmax(0, 1.12fr) minmax(0, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== 1. 在家練習開始畫面（START VIEW） ==================== -->
+  <section class="app-view start-view" id="viewStart">
+    <div class="start-shell">
+      <header class="hero">
+        <p class="eyebrow">小學五年級數學</p>
+        <h1>分數 × 整數</h1>
+      </header>
+
+      <div class="welcome-card">
+        <div class="badge-row">
+          <span class="role-badge">🎯 達標條件：完成全部 20 題真分數 × 整數</span>
+          <span class="role-badge gold-hint">🏆 零錦囊通關可獲「金色榮譽證書」</span>
+        </div>
+
+        <div class="rule-grid">
+          <div class="rule-item">
+            <span class="rule-icon">💡</span>
+            <span><strong>錦囊自主提示</strong>：長條模型與「幾分之幾合併成 1」想法預設隱藏，按「錦囊」才會出現。</span>
+          </div>
+          <div class="rule-item">
+            <span class="rule-icon">🏅</span>
+            <span><strong>專屬通關證書</strong>：完成 20 題即頒發證書，記錄使用錦囊題數（0 題金色 / 有用錦囊銀色）。</span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label for="stuNameInput">同學姓名（將印於通關證書上）</label>
+            <input id="stuNameInput" maxlength="12" placeholder="例如：陳大文">
+          </div>
+          <div class="field">
+            <label for="stuClassInput">班別／學號（選填）</label>
+            <input id="stuClassInput" maxlength="10" placeholder="例如：5A (08)">
+          </div>
+        </div>
+
+        <button type="button" class="btn-primary" id="btnStartPractice">開始 20 題自主挑戰 →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 2. 學生在家練習工作區（PRACTICE VIEW） ==================== -->
+  <section class="app-view" id="viewPractice" hidden>
+    <header class="topbar">
+      <div class="topbar-row">
+        <div class="topbar-left">
+          <button type="button" class="btn-soft" id="btnRestartAll">重新出題</button>
+          <span class="student-tag" id="stuInfoBadge">同學</span>
+          <span class="progress-pill" id="stuProgressBadge">已完成：0 / 20 題</span>
+          <span class="hint-stat-pill zero" id="stuHintCountBadge">已用錦囊：0 題</span>
+        </div>
+        <div class="topbar-right">
+          <button type="button" class="btn-primary btn-amber" id="btnOpenCertTop" hidden style="height:36px; font-size:13.5px; padding:0 14px;">🏆 查看通關證書</button>
+        </div>
+      </div>
+
+      <!-- 20 題題號快速切換列 -->
+      <nav class="q-nav-strip" id="stuQuestionStrip" aria-label="20 題題號切換"></nav>
+    </header>
+
+    <div class="student-body">
+      <!-- 左側：題目敘述 + 錦囊長條模型區 + 算式推演鏈 -->
+      <div class="panel-card">
+        <div class="q-header">
+          <div class="q-title-meta">
+            <span class="q-index-label" id="stuQIndexLabel">第 1 / 20 題</span>
+            <div id="stuPromptArea"></div>
+          </div>
+          <span class="q-type-pill" id="stuTypePill">計算題</span>
+        </div>
+
+        <div class="model-stage">
+          <div class="stage-banner">
+            <span class="stage-title" id="stuStageCaption">思考探究區</span>
+            <div class="stage-legend" id="stuStageLegend"></div>
+          </div>
+
+          <div class="svg-viewport" id="stuSvgViewport"></div>
+
+          <div class="chain-bar" id="stuChainBar"></div>
+        </div>
+      </div>
+
+      <!-- 右側：分步引導互動面板 -->
+      <div class="panel-card controls-col" id="stuControlsCol"></div>
+    </div>
+  </section>
+
+  <!-- ==================== 3. 未約至最簡彈出警告視窗 ==================== -->
+  <div class="warn-modal-backdrop" id="unreducedWarnModal" hidden>
+    <div class="warn-modal-card" role="alertdialog" aria-modal="true" aria-labelledby="warnModalTitle">
+      <div class="warn-icon">⚠️</div>
+      <h3 id="warnModalTitle">未約至最簡！</h3>
+      <p id="warnModalBody">分子與分母仍有大於 1 的公因數，請在算式中繼續點選數字進行約簡！</p>
+      <button type="button" class="btn-primary btn-orange" id="btnCloseWarnModal" style="height:46px; font-size:16px;">知道了，繼續約簡</button>
+    </div>
+  </div>
+
+  <!-- ==================== 4. 20 題達標通關證書（金色 / 銀色） ==================== -->
+  <div class="cert-backdrop" id="certModal" hidden>
+    <div class="cert-shell">
+      <div class="certificate-paper gold" id="certificatePaper">
+        <div class="cert-inner-border">
+          <div class="cert-medal" id="certMedal">🏆</div>
+          <span class="cert-ribbon" id="certRibbon">小學五年級數學・自主探究榮譽金獎</span>
+          <h2 class="cert-title" id="certTitle">黃金通關證書</h2>
+          <p class="cert-subtitle">特此嘉許</p>
+
+          <div class="cert-name-wrap">
+            <span class="cert-name-line" id="certStudentName">陳大文</span>
+            <span>同學</span>
+          </div>
+
+          <p class="cert-body-text">
+            順利完成 <strong>20 題</strong>「真分數 × 整數」綜合挑戰（涵蓋基本乘法、先約簡再相乘、假分數化帶分數及生活應用題），展現出色的數學運算與探究能力！
+          </p>
+
+          <div class="cert-hint-box" id="certHintSummary">
+            <span>🌟</span>
+            <span>0 題用了錦囊</span>
+          </div>
+
+          <div class="cert-footer">
+            <span id="certClassTag">在家自主練習版</span>
+            <span id="certDateText">頒發日期：2026年11月26日</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="cert-actions">
+        <button type="button" class="btn-primary btn-green" id="btnDownloadCert" style="height:44px; font-size:15px;">💾 儲存證書圖片</button>
+        <button type="button" class="btn-primary" id="btnNewRoundCert" style="height:44px; font-size:15px;">🔄 挑戰全新 20 題</button>
+        <button type="button" class="btn-soft" id="btnCloseCert" style="height:44px; font-size:15px; background:#fff;">檢視作答紀錄 ✕</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 輕量提示氣泡 -->
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+    /* =========================================================================
+       1. 數學工具函式
+       ========================================================================= */
+    function gcd(a, b) {
+      a = Math.abs(Math.round(a));
+      b = Math.abs(Math.round(b));
+      while (b !== 0) {
+        const t = a % b;
+        a = b;
+        b = t;
+      }
+      return a || 1;
+    }
+
+    function getCommonDivisors(a, b) {
+      const g = gcd(a, b);
+      const list = [];
+      for (let d = 2; d <= g; d++) {
+        if (g % d === 0) list.push(d);
+      }
+      return list;
+    }
+
+    function shuffleArray(arr) {
+      const copy = arr.slice();
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    /* =========================================================================
+       2. 20 題題庫與組卷引擎
+          - 全部題目均為「真分數 × 整數」（1 <= n < d，gcd(n, d) = 1，k >= 2）
+          - 涵蓋：
+            (A) 無需約分、無需化帶分數（4 題計算題）
+            (B) 無需約分、需化帶分數（4 題計算題）
+            (C) 需約分、無需化帶分數（3 題計算題）
+            (D) 需約分、需化帶分數（4 題計算題）
+            (W) 現實生活應用題（5 題，涵蓋上述各類運算）
+          - 共 20 題
+       ========================================================================= */
+    function buildQuestionSpec({ type, text = '', unit = '', n, d, k }) {
+      const rawNum = n * k;
+      const rawDen = d;
+      const reduceFactor = gcd(rawNum, rawDen);
+      const redNum = Math.round(rawNum / reduceFactor);
+      const redDen = Math.round(rawDen / reduceFactor);
+      const isImproper = redNum > redDen;
+      const ansWhole = isImproper ? Math.floor(redNum / redDen) : 0;
+      const ansNum = isImproper ? (redNum % redDen) : redNum;
+      const ansDen = redDen;
+
+      return {
+        type,
+        text,
+        unit,
+        n,
+        d,
+        k,
+        rawNum,
+        rawDen,
+        reduceFactor,
+        redNum,
+        redDen,
+        isImproper,
+        ansWhole,
+        ansNum,
+        ansDen
+      };
+    }
+
+    // 類別 A：無需約分、無需化帶分數
+    const POOL_TYPE_A = [
+      { n: 2, d: 7, k: 3 },
+      { n: 1, d: 5, k: 4 },
+      { n: 2, d: 9, k: 4 },
+      { n: 3, d: 10, k: 3 },
+      { n: 1, d: 6, k: 5 },
+      { n: 2, d: 11, k: 4 },
+      { n: 1, d: 8, k: 5 },
+      { n: 3, d: 11, k: 3 }
+    ];
+
+    // 類別 B：無需約分、需化帶分數
+    const POOL_TYPE_B = [
+      { n: 4, d: 5, k: 3 },
+      { n: 3, d: 4, k: 3 },
+      { n: 2, d: 3, k: 4 },
+      { n: 5, d: 6, k: 5 },
+      { n: 3, d: 5, k: 4 },
+      { n: 4, d: 7, k: 3 },
+      { n: 5, d: 8, k: 3 },
+      { n: 2, d: 5, k: 4 }
+    ];
+
+    // 類別 C：需約分、無需化帶分數
+    const POOL_TYPE_C = [
+      { n: 1, d: 6, k: 4 },
+      { n: 1, d: 8, k: 6 },
+      { n: 1, d: 9, k: 6 },
+      { n: 2, d: 9, k: 3 },
+      { n: 1, d: 10, k: 6 },
+      { n: 1, d: 12, k: 8 },
+      { n: 1, d: 12, k: 9 }
+    ];
+
+    // 類別 D：需約分、需化帶分數
+    const POOL_TYPE_D = [
+      { n: 7, d: 12, k: 8 },
+      { n: 3, d: 10, k: 5 },
+      { n: 5, d: 6, k: 4 },
+      { n: 5, d: 8, k: 6 },
+      { n: 3, d: 8, k: 6 },
+      { n: 5, d: 12, k: 9 },
+      { n: 4, d: 9, k: 6 },
+      { n: 5, d: 9, k: 6 },
+      { n: 7, d: 10, k: 6 },
+      { n: 5, d: 12, k: 8 },
+      { n: 7, d: 12, k: 9 },
+      { n: 7, d: 12, k: 10 }
+    ];
+
+    // 現實生活應用題題庫（5 題）
+    const POOL_WORD = [
+      {
+        text: '運動會每位隊員飲用 4/5 升水，3 位隊員共喝水多少升？',
+        unit: '升',
+        n: 4, d: 5, k: 3
+      },
+      {
+        text: '每包麵粉重 3/10 公斤，媽媽買了 5 包，共重多少公斤？',
+        unit: '公斤',
+        n: 3, d: 10, k: 5
+      },
+      {
+        text: '做一個蝴蝶結需要絲帶 1/8 米，做 6 個同樣的蝴蝶結共需要絲帶多少米？',
+        unit: '米',
+        n: 1, d: 8, k: 6
+      },
+      {
+        text: '小明每天溫習數學 2/9 小時，4 天共溫習數學多少小時？',
+        unit: '小時',
+        n: 2, d: 9, k: 4
+      },
+      {
+        text: '一瓶果汁有 5/6 升，派對準備了 4 瓶，共有果汁多少升？',
+        unit: '升',
+        n: 5, d: 6, k: 4
+      },
+      {
+        text: '每塊手工曲奇餅用去牛油 3/8 兩，烘焙 6 塊共需牛油多少兩？',
+        unit: '兩',
+        n: 3, d: 8, k: 6
+      },
+      {
+        text: '一條步行徑每段長 5/12 公里，志強走了 8 段，共走了多少公里？',
+        unit: '公里',
+        n: 5, d: 12, k: 8
+      },
+      {
+        text: '每杯鮮奶有 1/6 升，早餐店賣出 4 杯，共賣出鮮奶多少升？',
+        unit: '升',
+        n: 1, d: 6, k: 4
+      }
+    ];
+
+    function generate20Questions() {
+      const partA = shuffleArray(POOL_TYPE_A).slice(0, 4).map((item) => buildQuestionSpec({ type: 'calc', ...item }));
+      const partB = shuffleArray(POOL_TYPE_B).slice(0, 4).map((item) => buildQuestionSpec({ type: 'calc', ...item }));
+      const partC = shuffleArray(POOL_TYPE_C).slice(0, 3).map((item) => buildQuestionSpec({ type: 'calc', ...item }));
+      const partD = shuffleArray(POOL_TYPE_D).slice(0, 4).map((item) => buildQuestionSpec({ type: 'calc', ...item }));
+      const partW = shuffleArray(POOL_WORD).slice(0, 5).map((item) => buildQuestionSpec({ type: 'word', ...item }));
+
+      // 依循序漸進節奏排列：基礎熱身 -> 應用題 -> 約簡進階 -> 綜合挑戰
+      const arranged = [
+        partA[0], partB[0], partA[1], partW[0],
+        partC[0], partB[1], partD[0], partW[1],
+        partA[2], partC[1], partD[1], partW[2],
+        partB[2], partD[2], partA[3], partW[3],
+        partC[2], partB[3], partD[3], partW[4]
+      ];
+
+      return arranged.map((q, idx) => ({ ...q, id: idx + 1 }));
+    }
+
+    const PIECE_COLORS = [
+      '#2f9bff', '#ff8a1e', '#2fce86', '#f2558a',
+      '#7a6cff', '#e2b31a', '#1bb8d4', '#ff5a4e', '#10b981', '#f97316'
+    ];
+
+    /* =========================================================================
+       3. 教學級 SVG 長條模型繪製引擎（開啟「錦囊」後呈現）
+       ========================================================================= */
+    const SVG_NS = 'http://www.w3.org/2000/svg';
+    function svgNode(tag, attrs = {}) {
+      const el = document.createElementNS(SVG_NS, tag);
+      for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, String(v));
+      return el;
+    }
+
+    function renderBarModelSVG(q, stage, customMergeFactor = null) {
+      const svg = svgNode('svg', { preserveAspectRatio: 'xMidYMid meet' });
+      const INK = '#16324a';
+      const EMPTY = '#eaf3fa';
+
+      // 【階段一：合併前】k 條獨立長條
+      if (stage === 'unmerged') {
+        const cell = q.d >= 10 ? 26 : 34;
+        const barW = q.d * cell;
+        const barH = cell;
+        const plusW = 24;
+        const rowGap = 22;
+        const pad = 16;
+
+        const cols = q.k <= 4 ? q.k : (q.k <= 8 ? 4 : 5);
+        const rows = Math.ceil(q.k / cols);
+        const totalW = pad * 2 + cols * barW + (cols - 1) * plusW;
+        const totalH = pad * 2 + rows * barH + (rows - 1) * rowGap + 18;
+        svg.setAttribute('viewBox', `0 0 ${totalW} ${totalH}`);
+
+        for (let i = 0; i < q.k; i++) {
+          const r = Math.floor(i / cols);
+          const c = i % cols;
+          const x0 = pad + c * (barW + plusW);
+          const y0 = pad + r * (barH + rowGap);
+          const color = PIECE_COLORS[i % PIECE_COLORS.length];
+
+          svg.appendChild(svgNode('rect', { x: x0, y: y0, width: barW, height: barH, fill: EMPTY, rx: 3 }));
+          for (let s = 0; s < q.n; s++) {
+            svg.appendChild(svgNode('rect', { x: x0 + s * cell, y: y0, width: cell, height: barH, fill: color, opacity: 0.86 }));
+          }
+          for (let s = 1; s < q.d; s++) {
+            svg.appendChild(svgNode('line', {
+              x1: x0 + s * cell, y1: y0, x2: x0 + s * cell, y2: y0 + barH,
+              stroke: INK, 'stroke-width': 1.8
+            }));
+          }
+          svg.appendChild(svgNode('rect', {
+            x: x0, y: y0, width: barW, height: barH, fill: 'none',
+            stroke: INK, 'stroke-width': 2.6, rx: 3
+          }));
+
+          const lbl = svgNode('text', {
+            x: x0 + barW / 2, y: y0 + barH + 14,
+            'text-anchor': 'middle', 'font-size': 12, 'font-weight': 800, fill: color
+          });
+          lbl.textContent = `第 ${i + 1} 份 (${q.n}/${q.d})`;
+          svg.appendChild(lbl);
+
+          if (i < q.k - 1 && c < cols - 1) {
+            const plus = svgNode('text', {
+              x: x0 + barW + plusW / 2, y: y0 + barH / 2 + 1,
+              'text-anchor': 'middle', 'dominant-baseline': 'central',
+              'font-size': 24, 'font-weight': 900, fill: '#5c7388'
+            });
+            plus.textContent = '+';
+            svg.appendChild(plus);
+          }
+        }
+        return svg;
+      }
+
+      // 【階段二～四：合併後 / 約簡 / 化帶分數】
+      const totalBars = Math.max(1, Math.ceil(q.rawNum / q.d));
+      const cols = totalBars <= 2 ? totalBars : (totalBars <= 4 ? 2 : 3);
+      const rows = Math.ceil(totalBars / cols);
+
+      const cell = q.d >= 10 ? 28 : 38;
+      const barW = q.d * cell;
+      const barH = 42;
+      const colGap = 32;
+      const topCalloutH = (stage === 'reduced' || stage === 'mixed') ? 30 : 0;
+      const botCalloutH = (stage === 'reduced' || stage === 'mixed') ? 24 : 0;
+      const rowGap = 24 + topCalloutH + botCalloutH;
+      const pad = 20;
+
+      const totalW = pad * 2 + cols * barW + (cols - 1) * colGap;
+      const totalH = pad * 2 + topCalloutH + rows * barH + (rows - 1) * rowGap + botCalloutH;
+      svg.setAttribute('viewBox', `0 0 ${totalW} ${totalH}`);
+
+      const g = customMergeFactor || q.reduceFactor;
+      const curDen = g > 1 ? Math.round(q.d / g) : q.d;
+      const isReduced = (stage === 'reduced' || stage === 'mixed') && g > 1;
+      const isMixed = (stage === 'mixed') && q.isImproper;
+
+      for (let b = 0; b < totalBars; b++) {
+        const r = Math.floor(b / cols);
+        const c = b % cols;
+        const x0 = pad + c * (barW + colGap);
+        const y0 = pad + topCalloutH + r * (barH + rowGap);
+        const barStartIdx = b * q.d;
+        const shadedInThisBar = Math.max(0, Math.min(q.d, q.rawNum - barStartIdx));
+        const isFullBar = (shadedInThisBar === q.d);
+
+        svg.appendChild(svgNode('rect', { x: x0, y: y0, width: barW, height: barH, fill: EMPTY, rx: 4 }));
+
+        for (let s = 0; s < shadedInThisBar; s++) {
+          const globalCellIdx = barStartIdx + s;
+          const pieceIdx = Math.floor(globalCellIdx / q.n);
+          const color = PIECE_COLORS[pieceIdx % PIECE_COLORS.length];
+          svg.appendChild(svgNode('rect', {
+            x: x0 + s * cell, y: y0, width: cell, height: barH,
+            fill: color, opacity: isMixed && isFullBar ? 0.32 : 0.86
+          }));
+        }
+
+        for (let s = 1; s < q.d; s++) {
+          const isGroupBoundary = isReduced && (s % g === 0);
+          if (isReduced && !isGroupBoundary) {
+            svg.appendChild(svgNode('line', {
+              x1: x0 + s * cell, y1: y0 + 3, x2: x0 + s * cell, y2: y0 + barH - 3,
+              stroke: 'rgba(22, 50, 74, 0.25)', 'stroke-width': 1, 'stroke-dasharray': '3,3'
+            }));
+          } else {
+            svg.appendChild(svgNode('line', {
+              x1: x0 + s * cell, y1: y0, x2: x0 + s * cell, y2: y0 + barH,
+              stroke: isGroupBoundary ? '#e36a12' : INK,
+              'stroke-width': isGroupBoundary ? 3.4 : 1.8
+            }));
+          }
+        }
+
+        svg.appendChild(svgNode('rect', {
+          x: x0, y: y0, width: barW, height: barH, fill: 'none',
+          stroke: (isMixed && isFullBar) ? '#149e63' : INK,
+          'stroke-width': (isMixed && isFullBar) ? 3.6 : 2.8,
+          rx: 4
+        }));
+
+        if (stage === 'reduced' && g > 1) {
+          const numGroups = Math.floor(q.d / g);
+          for (let grp = 0; grp < numGroups; grp++) {
+            const gx = x0 + grp * g * cell;
+            if (grp * g < shadedInThisBar) {
+              svg.appendChild(svgNode('rect', {
+                x: gx + 1, y: y0 + 1, width: g * cell - 2, height: barH - 2,
+                fill: 'none', stroke: '#e36a12', 'stroke-width': 2.6, rx: 3
+              }));
+            }
+          }
+          if (b === 0) {
+            const txt = svgNode('text', {
+              x: x0 + barW / 2, y: y0 - 8,
+              'text-anchor': 'middle', 'font-size': 13, 'font-weight': 900, fill: '#e36a12'
+            });
+            txt.textContent = `每 ${g} 份合併了！（${q.d}份→${curDen}大份）`;
+            svg.appendChild(txt);
+          }
+          const mergedShadedGroups = shadedInThisBar / g;
+          const sub = svgNode('text', {
+            x: x0 + barW / 2, y: y0 + barH + 16,
+            'text-anchor': 'middle', 'font-size': 12, 'font-weight': 800, fill: INK
+          });
+          sub.textContent = `此條含 ${mergedShadedGroups}/${curDen} 份`;
+          svg.appendChild(sub);
+        }
+
+        if (isMixed) {
+          if (isFullBar) {
+            svg.appendChild(svgNode('rect', {
+              x: x0 + 3, y: y0 + 3, width: barW - 6, height: barH - 6,
+              fill: 'rgba(230, 248, 239, 0.9)', rx: 4
+            }));
+            const oneTxt = svgNode('text', {
+              x: x0 + barW / 2, y: y0 + barH / 2 + 1,
+              'text-anchor': 'middle', 'dominant-baseline': 'central',
+              'font-size': 20, 'font-weight': 900, fill: '#149e63'
+            });
+            oneTxt.textContent = `${q.redDen}/${q.redDen} 合併成「1」`;
+            svg.appendChild(oneTxt);
+
+            const topTag = svgNode('text', {
+              x: x0 + barW / 2, y: y0 - 8,
+              'text-anchor': 'middle', 'font-size': 13, 'font-weight': 900, fill: '#149e63'
+            });
+            topTag.textContent = `滿 ${q.redDen} 份合成 1`;
+            svg.appendChild(topTag);
+          } else {
+            const remParts = shadedInThisBar / g;
+            const remTxt = svgNode('text', {
+              x: x0 + barW / 2, y: y0 - 8,
+              'text-anchor': 'middle', 'font-size': 13, 'font-weight': 850, fill: '#0b74d1'
+            });
+            remTxt.textContent = `餘下 ${remParts}/${q.redDen}`;
+            svg.appendChild(remTxt);
+          }
+        }
+      }
+
+      return svg;
+    }
+
+    /* =========================================================================
+       4. 應用程式狀態與輔助函式
+       ========================================================================= */
+    function createInitialQuestionProgress(q) {
+      return {
+        hintUsed: false,            // 是否已按「錦囊」開啟長條模型與合併 1 想法
+        eqVerified: q.type === 'calc',
+        eqNumInput: '',
+        eqDenInput: '',
+        eqIntInput: '',
+        stage: 'unmerged',          // 同步隨計算步驟推進，僅在 hintUsed=true 時顯示模型
+        formulaVerified: false,
+        fNum1Input: '',
+        fNum2Input: '',
+        fDenInput: '',
+        curN1: q.n,
+        curN2: q.k,
+        curDen: q.d,
+        currentMergeFactor: 1,
+        selectedNumSlot: null,
+        denSelected: false,
+        cancelDivInput: '',
+        cancelSteps: [],
+        reduceHint: '',
+        reduceVerified: q.reduceFactor === 1,
+        improperVerified: !q.isImproper,
+        impNumInput: '',
+        impDenInput: '',
+        ansWholeInput: '',
+        ansNumInput: '',
+        ansDenInput: '',
+        solved: false,
+        feedback: '',
+        feedbackType: ''
+      };
+    }
+
+    const state = {
+      studentName: '',
+      studentClass: '',
+      questions: [],
+      currentQ: 0,
+      progress: [],
+      certShownOnce: false
+    };
+
+    function showToast(msg) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      clearTimeout(el._t);
+      el._t = setTimeout(() => el.classList.remove('show'), 2500);
+    }
+
+    function vfracHTML(n, d) {
+      return `<span class="vfrac"><span class="n">${n}</span><span class="d">${d}</span></span>`;
+    }
+
+    function formatPromptHTML(q) {
+      if (q.type === 'word') {
+        const html = q.text.replace(/(\d+)\/(\d+)/g, (_, a, b) => vfracHTML(a, b));
+        return `<p class="q-prompt">${html}</p>`;
+      }
+      return `<div class="math-inline">${vfracHTML(q.n, q.d)} <span>×</span> <span>${q.k}</span> <span>=</span> <span>?</span></div>`;
+    }
+
+    // 產生「假分數轉帶分數」的雲朵想法 HTML（僅開啟錦囊後顯示）
+    function buildMixedThoughtHTML(q, includeFinalAns = false) {
+      const onesFracs = Array(q.ansWhole).fill(vfracHTML(q.redDen, q.redDen)).join(' + ');
+      const onesNums = Array(q.ansWhole).fill('1').join(' + ');
+      const remFrac = vfracHTML(q.ansNum, q.ansDen);
+      const finalPart = includeFinalAns ? ` = <strong>${q.ansWhole}</strong> ${remFrac}` : '';
+      return `
+        <span class="thought-cloud-math">
+          ${vfracHTML(q.redNum, q.redDen)} = ${onesFracs} + ${remFrac} = ${onesNums} + ${remFrac}${finalPart}
+        </span>
+      `;
+    }
+
+    // 產生「分子 × 整數 / 分母」算式 HTML（約簡時直接刪去原數字並寫上約簡後的數字，不另加步驟）
+    function buildFormulaChainFracHTML(q, p) {
+      if (q.reduceFactor > 1 && p.cancelSteps.length > 0) {
+        const n1Hist = p.cancelSteps
+          .filter((st) => st.slot === 'n1')
+          .map((st) => `<span class="cancel-old-val">${st.oldVal}</span>`)
+          .join(' ');
+        const n2Hist = p.cancelSteps
+          .filter((st) => st.slot === 'n2')
+          .map((st) => `<span class="cancel-old-val">${st.oldVal}</span>`)
+          .join(' ');
+        const denHist = p.cancelSteps
+          .map((st) => `<span class="cancel-old-val">${st.oldDen}</span>`)
+          .join(' ');
+
+        const n1Str = n1Hist ? `${n1Hist} <span class="cancel-new-val">${p.curN1}</span>` : `${p.curN1}`;
+        const n2Str = n2Hist ? `${n2Hist} <span class="cancel-new-val">${p.curN2}</span>` : `${p.curN2}`;
+        const denStr = denHist ? `${denHist} <span class="cancel-new-val">${p.curDen}</span>` : `${p.curDen}`;
+        return vfracHTML(`${n1Str} × ${n2Str}`, denStr);
+      }
+      return vfracHTML(`${q.n} × ${q.k}`, q.d);
+    }
+
+    function openUnreducedPopup(detailMsg) {
+      const modal = document.getElementById('unreducedWarnModal');
+      const body = document.getElementById('warnModalBody');
+      if (detailMsg) body.textContent = detailMsg;
+      modal.hidden = false;
+    }
+
+    function getSolvedCount() {
+      return state.progress.filter((p) => p.solved).length;
+    }
+
+    function getHintUsedCount() {
+      return state.progress.filter((p) => p.hintUsed).length;
+    }
+
+    /* =========================================================================
+       5. 啟動與渲染練習工作區
+       ========================================================================= */
+    function startPracticeSession(name, classText) {
+      state.studentName = name.trim();
+      state.studentClass = classText.trim();
+      state.questions = generate20Questions();
+      state.currentQ = 0;
+      state.progress = state.questions.map((q) => createInitialQuestionProgress(q));
+      state.certShownOnce = false;
+
+      document.getElementById('viewStart').hidden = true;
+      document.getElementById('viewPractice').hidden = false;
+      document.getElementById('certModal').hidden = true;
+
+      const label = state.studentClass ? `${state.studentName}（${state.studentClass}）` : state.studentName;
+      document.getElementById('stuInfoBadge').textContent = label;
+
+      renderPracticeWorkspace();
+    }
+
+    function renderPracticeWorkspace() {
+      const idx = state.currentQ;
+      const q = state.questions[idx];
+      const p = state.progress[idx];
+
+      const solvedCount = getSolvedCount();
+      const hintCount = getHintUsedCount();
+
+      // 頂部進度與錦囊統計
+      document.getElementById('stuProgressBadge').textContent = `已完成：${solvedCount} / 20 題`;
+      const hintBadge = document.getElementById('stuHintCountBadge');
+      hintBadge.textContent = `已用錦囊：${hintCount} 題`;
+      hintBadge.className = 'hint-stat-pill' + (hintCount === 0 ? ' zero' : '');
+
+      const topCertBtn = document.getElementById('btnOpenCertTop');
+      topCertBtn.hidden = (solvedCount < 20);
+
+      // 20 題題號導航列
+      const strip = document.getElementById('stuQuestionStrip');
+      strip.innerHTML = state.questions.map((item, i) => {
+        const prog = state.progress[i];
+        const cls = [
+          'q-num-pill',
+          i === idx ? 'active' : '',
+          prog.solved ? 'done' : '',
+          prog.hintUsed ? 'used-hint' : ''
+        ].filter(Boolean).join(' ');
+        return `<button type="button" class="${cls}" data-q-idx="${i}" title="第 ${i + 1} 題${prog.solved ? '（已完成）' : ''}${prog.hintUsed ? '（已用錦囊）' : ''}">${i + 1}${prog.solved ? '✓' : ''}</button>`;
+      }).join('');
+      strip.querySelectorAll('[data-q-idx]').forEach((btn) => {
+        btn.onclick = () => {
+          state.currentQ = Number(btn.dataset.qIdx);
+          renderPracticeWorkspace();
+        };
+      });
+
+      // 自動捲動目前題號至可視位置
+      const activePill = strip.querySelector('.q-num-pill.active');
+      if (activePill && activePill.scrollIntoView) {
+        activePill.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      }
+
+      // 題目標題與內容
+      document.getElementById('stuQIndexLabel').textContent = `第 ${idx + 1} / 20 題`;
+      document.getElementById('stuPromptArea').innerHTML = formatPromptHTML(q);
+      const pill = document.getElementById('stuTypePill');
+      pill.textContent = q.type === 'word' ? '生活應用題（先列式）' : '計算題';
+      pill.className = 'q-type-pill' + (q.type === 'word' ? ' word' : '');
+
+      // 左側：錦囊控制的長條模型舞台 + 算式推演鏈
+      const viewport = document.getElementById('stuSvgViewport');
+      const caption = document.getElementById('stuStageCaption');
+      const legend = document.getElementById('stuStageLegend');
+      const chainBar = document.getElementById('stuChainBar');
+
+      if (!p.hintUsed) {
+        // 尚未按「錦囊」：隱藏長條模型與合併 1 想法，提供按「錦囊」按鈕
+        viewport.classList.remove('active-model');
+        viewport.classList.add('hint-standby');
+        caption.textContent = '自主思考挑戰中（長條模型與合併「1」想法已收納於錦囊）';
+        legend.innerHTML = '';
+        viewport.innerHTML = `
+          <div class="hint-gate-box">
+            <div class="icon">💡</div>
+            <h3>先試試自己列式與計算吧！</h3>
+            <p>不按錦囊完成全部 20 題，即可獲得<strong>金色榮譽通關證書</strong>！<br>如果遇到困難，隨時可以點擊下方按鈕打開本題錦囊。</p>
+            <button type="button" class="btn-use-hint" id="btnUnlockHint">
+              <span>💡 打開本題錦囊（顯示長條模型與合併 1 想法）</span>
+            </button>
+          </div>
+        `;
+        const btnHint = document.getElementById('btnUnlockHint');
+        if (btnHint) {
+          btnHint.onclick = () => {
+            p.hintUsed = true;
+            showToast('💡 已打開本題錦囊！長條模型與合併 1 想法已顯示');
+            renderPracticeWorkspace();
+          };
+        }
+      } else {
+        // 已按「錦囊」：展示互動長條模型
+        viewport.classList.remove('hint-standby');
+        if (!p.eqVerified) {
+          viewport.classList.remove('active-model');
+          viewport.innerHTML = `
+            <div class="hint-gate-box">
+              <div class="icon">✏️</div>
+              <h3>錦囊已開啟！</h3>
+              <p>應用題請先在右方「步驟 1」列出正確算式，長條模型便會隨即出現！</p>
+            </div>
+          `;
+          caption.textContent = '長條模型（等待列式完成）';
+          legend.innerHTML = `<span style="color:var(--amber);">💡 本題已使用錦囊</span>`;
+        } else {
+          viewport.classList.add('active-model');
+          const mf = p.currentMergeFactor > 1 ? p.currentMergeFactor : q.reduceFactor;
+          const svg = renderBarModelSVG(q, p.stage, mf);
+          viewport.replaceChildren(svg);
+
+          if (p.stage === 'unmerged') {
+            caption.textContent = `長條模型（合併前）：共有 ${q.k} 個 ${q.n}/${q.d}`;
+          } else if (p.stage === 'merged') {
+            caption.textContent = `長條模型（合併後）：共 ${q.rawNum} 格（每條滿 ${q.d} 格為 1 整體）`;
+          } else if (p.stage === 'reduced') {
+            const curDen = Math.round(q.d / mf);
+            caption.textContent = `約簡合併：每 ${mf} 小份合併成 1 大份（${q.d}份 → ${curDen}大份）`;
+          } else if (p.stage === 'mixed') {
+            caption.textContent = `化為帶分數想法：每 ${q.redDen}/${q.redDen} 合併成「1」，共得 ${q.ansWhole} ${q.ansNum}/${q.ansDen}`;
+          }
+          legend.innerHTML = `<span style="color:var(--amber);">💡 本題已使用錦囊</span><span>🟦🟧🟩 不同顏色 = 各份來源</span>`;
+        }
+      }
+
+      // 左側下方：即時算式推演鏈（合併 1 的想法雲朵僅在 p.hintUsed === true 時出現）
+      if (!p.eqVerified) {
+        chainBar.innerHTML = `<span style="color:var(--muted); font-size:15px;">列式正確後，這裡會逐步記錄你的計算推演過程。</span>`;
+      } else {
+        const chips = [];
+        chips.push(`<span class="chain-chip">${vfracHTML(q.n, q.d)} × ${q.k}</span>`);
+        if (p.formulaVerified) {
+          chips.push(`<span>=</span><span class="chain-chip">${buildFormulaChainFracHTML(q, p)}</span>`);
+        }
+        if (p.improperVerified && q.isImproper) {
+          chips.push(`<span>=</span><span class="chain-chip">${vfracHTML(q.redNum, q.redDen)}</span>`);
+          if (p.hintUsed) {
+            chips.push(`
+              <div class="thought-cloud-wrap">
+                <span class="thought-dots" aria-hidden="true"><i></i><i></i></span>
+                <div class="thought-cloud">
+                  <span class="thought-cloud-tag">☁️ 想法（每 ${q.redDen}/${q.redDen} 合併成 1）</span>
+                  ${buildMixedThoughtHTML(q, p.solved)}
+                </div>
+              </div>
+            `);
+          }
+        }
+        if (p.solved) {
+          const finalHtml = q.isImproper
+            ? `<strong>${q.ansWhole}</strong> ${vfracHTML(q.ansNum, q.ansDen)}`
+            : `${vfracHTML(q.ansNum, q.ansDen)}`;
+          chips.push(`<span>=</span><span class="chain-chip highlight-mixed">${finalHtml}</span>`);
+        }
+        chainBar.innerHTML = chips.join('');
+      }
+
+      // 右側分步控制項
+      renderPracticeControls(q, p);
+    }
+
+    function applyCancellationDivisor(q, p, slot, div) {
+      const oldVal = slot === 'n1' ? p.curN1 : p.curN2;
+      const newVal = Math.round(oldVal / div);
+      const oldDen = p.curDen;
+      const newDen = Math.round(oldDen / div);
+
+      p.cancelSteps.push({ slot, oldVal, newVal, oldDen, newDen, div });
+      if (slot === 'n1') p.curN1 = newVal;
+      else p.curN2 = newVal;
+      p.curDen = newDen;
+      p.currentMergeFactor = (p.currentMergeFactor || 1) * div;
+      p.selectedNumSlot = null;
+      p.denSelected = false;
+      p.cancelDivInput = '';
+      p.stage = 'reduced';
+      p.reduceHint = p.hintUsed
+        ? `✨ 已用 ${div} 約簡！長條模型已即時「每 ${p.currentMergeFactor} 份合併了」！`
+        : `✨ 已用 ${div} 約簡（${oldVal}→${newVal}，${oldDen}→${newDen}）！`;
+    }
+
+    function renderPracticeControls(q, p) {
+      const col = document.getElementById('stuControlsCol');
+      const blocks = [];
+      let stepCounter = 1;
+
+      // 【步驟 1（應用題專用）：先列式】
+      if (q.type === 'word') {
+        const sNum = stepCounter++;
+        const boxCls = p.eqVerified ? 'step-box completed' : 'step-box current';
+        blocks.push(`
+          <div class="${boxCls}">
+            <div class="step-head">
+              <span class="step-label"><span class="step-num">${sNum}</span>列出算式（真分數 × 整數）</span>
+              ${p.eqVerified ? '<span style="color:var(--green); font-weight:850; font-size:13px;">✅ 已列式</span>' : ''}
+            </div>
+            <div class="expr-builder">
+              <div class="frac-input-stack">
+                <input class="num-box" id="inpEqNum" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="分子" value="${p.eqNumInput}" ${p.eqVerified ? 'disabled' : ''}>
+                <span class="frac-bar-line"></span>
+                <input class="num-box" id="inpEqDen" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="分母" value="${p.eqDenInput}" ${p.eqVerified ? 'disabled' : ''}>
+              </div>
+              <span class="op-symbol">×</span>
+              <input class="num-box" id="inpEqInt" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="整數" value="${p.eqIntInput}" ${p.eqVerified ? 'disabled' : ''}>
+            </div>
+            ${!p.eqVerified ? `<button type="button" class="btn-primary" id="btnCheckEq" style="height:44px; font-size:15px;">檢查算式 ➔</button>` : ''}
+          </div>
+        `);
+      }
+
+      // 【步驟 2：寫出「分子 × 整數 / 分母」】
+      const sFormulaNum = stepCounter++;
+      const formulaLocked = !p.eqVerified;
+      const formulaBoxCls = formulaLocked ? 'step-box locked' : (p.formulaVerified ? 'step-box completed' : 'step-box current');
+
+      blocks.push(`
+        <div class="${formulaBoxCls}">
+          <div class="step-head">
+            <span class="step-label"><span class="step-num">${sFormulaNum}</span>寫出「分子 × 整數 / 分母」</span>
+            ${p.formulaVerified ? '<span style="color:var(--green); font-weight:850; font-size:13px;">✅ 正確</span>' : ''}
+          </div>
+          <div class="expr-builder">
+            <div style="display:flex; flex-direction:column; align-items:center; gap:6px;">
+              <div style="display:flex; align-items:center; gap:6px;">
+                <input class="num-box" id="inpFNum1" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="分子" value="${p.fNum1Input}" ${p.formulaVerified ? 'disabled' : ''}>
+                <span class="op-symbol" style="font-size:20px;">×</span>
+                <input class="num-box" id="inpFNum2" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="整數" value="${p.fNum2Input}" ${p.formulaVerified ? 'disabled' : ''}>
+              </div>
+              <span class="frac-bar-line" style="width:168px;"></span>
+              <input class="num-box" id="inpFDen" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="分母" value="${p.fDenInput}" ${p.formulaVerified ? 'disabled' : ''}>
+            </div>
+          </div>
+          ${!p.formulaVerified ? `<button type="button" class="btn-primary" id="btnCheckFormula" style="height:44px; font-size:15px;">確認算式 ✓</button>` : ''}
+        </div>
+      `);
+
+      // 【步驟 3（需約簡題目專用）：點選數字並填入「用 ? 約簡」】
+      if (q.reduceFactor > 1) {
+        const sReduceNum = stepCounter++;
+        const reduceLocked = !p.formulaVerified;
+        const reduceBoxCls = reduceLocked ? 'step-box locked' : (p.reduceVerified ? 'step-box completed' : 'step-box current');
+
+        const n1HistoryHTML = p.cancelSteps
+          .filter((st) => st.slot === 'n1')
+          .map((st) => `<span class="cancel-old-val">${st.oldVal}</span>`)
+          .join('');
+        const n2HistoryHTML = p.cancelSteps
+          .filter((st) => st.slot === 'n2')
+          .map((st) => `<span class="cancel-old-val">${st.oldVal}</span>`)
+          .join('');
+        const denHistoryHTML = p.cancelSteps
+          .map((st) => `<span class="cancel-old-val">${st.oldDen}</span>`)
+          .join('');
+
+        const n1ValHTML = n1HistoryHTML ? `${n1HistoryHTML}<span class="cancel-new-val">${p.curN1}</span>` : `${p.curN1}`;
+        const n2ValHTML = n2HistoryHTML ? `${n2HistoryHTML}<span class="cancel-new-val">${p.curN2}</span>` : `${p.curN2}`;
+        const denValHTML = denHistoryHTML ? `${denHistoryHTML}<span class="cancel-new-val">${p.curDen}</span>` : `${p.curDen}`;
+
+        const dispN1HTML = reduceLocked ? '?' : n1ValHTML;
+        const dispN2HTML = reduceLocked ? '?' : n2ValHTML;
+        const dispDenHTML = reduceLocked ? '?' : denValHTML;
+
+        let divisorPickerHTML = '';
+        if (!reduceLocked && !p.reduceVerified && p.selectedNumSlot && p.denSelected) {
+          divisorPickerHTML = `
+            <div class="divisor-choice-row">
+              <span style="font-size:15px; font-weight:850; color:var(--ink);">用</span>
+              <input class="divisor-box" id="inpCancelDiv" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="?" value="${p.cancelDivInput || ''}" aria-label="輸入約簡的數">
+              <span style="font-size:15px; font-weight:850; color:var(--ink);">約簡</span>
+              <button type="button" class="btn-divisor" id="btnApplyCancelDiv">確定</button>
+            </div>
+          `;
+        }
+
+        let cancelGuideText = '先點選分子的一個數字，再點選分母';
+        if (reduceLocked) {
+          cancelGuideText = '請先完成上一步算式，這裡才會顯示數字';
+        } else if (p.reduceVerified) {
+          cancelGuideText = '已完成約簡！';
+        } else if (p.selectedNumSlot && p.denSelected) {
+          cancelGuideText = '請在下方填入要用哪個數約簡';
+        } else if (p.selectedNumSlot) {
+          cancelGuideText = '已選取分子，請再點選下方分母';
+        }
+
+        blocks.push(`
+          <div class="${reduceBoxCls}">
+            <div class="step-head">
+              <span class="step-label"><span class="step-num">${sReduceNum}</span>點選數字約簡（先約簡再相乘）</span>
+              ${p.reduceVerified ? '<span style="color:var(--green); font-weight:850; font-size:13px;">✅ 已最簡</span>' : ''}
+            </div>
+            <div class="cancel-workspace">
+              <div style="font-size:12px; font-weight:800; color:var(--muted); text-align:center;">
+                ${cancelGuideText}
+              </div>
+              <div class="cancel-frac-box">
+                <div class="cancel-row">
+                  <button type="button" class="cancel-num-btn ${!reduceLocked && p.selectedNumSlot === 'n1' ? 'selected' : ''} ${!reduceLocked && n1HistoryHTML ? 'reduced-done' : ''}" id="btnCancelN1" ${(reduceLocked || p.reduceVerified || p.curN1 === 1) ? 'disabled' : ''}>${dispN1HTML}</button>
+                  <span class="op-symbol" style="font-size:20px;">×</span>
+                  <button type="button" class="cancel-num-btn ${!reduceLocked && p.selectedNumSlot === 'n2' ? 'selected' : ''} ${!reduceLocked && n2HistoryHTML ? 'reduced-done' : ''}" id="btnCancelN2" ${(reduceLocked || p.reduceVerified || p.curN2 === 1) ? 'disabled' : ''}>${dispN2HTML}</button>
+                </div>
+                <span class="frac-bar-line" style="width:165px;"></span>
+                <div class="cancel-row">
+                  <button type="button" class="cancel-num-btn ${!reduceLocked && p.denSelected ? 'selected' : ''} ${!reduceLocked && denHistoryHTML ? 'reduced-done' : ''}" id="btnCancelDen" ${(reduceLocked || p.reduceVerified) ? 'disabled' : ''}>${dispDenHTML}</button>
+                </div>
+              </div>
+              ${divisorPickerHTML}
+              ${!reduceLocked && p.reduceHint ? `<div style="font-size:12px; font-weight:850; color:var(--orange); text-align:center;">${p.reduceHint}</div>` : ''}
+            </div>
+            ${!p.reduceVerified ? `<button type="button" class="btn-primary btn-orange" id="btnFinishReduce" style="height:44px; font-size:15px;">完成約簡，繼續下一步 ➔</button>` : ''}
+          </div>
+        `);
+      }
+
+      // 【步驟 4：計算結果並寫出最終答案】
+      const sAnsNum = stepCounter++;
+      const ansLocked = !p.formulaVerified || !p.reduceVerified;
+      const ansBoxCls = ansLocked ? 'step-box locked' : (p.solved ? 'step-box completed' : 'step-box current');
+
+      // 跳至下一道未完成題目按鈕
+      const nextUnfinishedIdx = state.progress.findIndex((item, i) => i > state.currentQ && !item.solved);
+      const fallbackNextIdx = nextUnfinishedIdx !== -1 ? nextUnfinishedIdx : state.progress.findIndex((item) => !item.solved);
+      const nextBtnHTML = (p.solved && fallbackNextIdx !== -1)
+        ? `<button type="button" class="btn-primary" id="btnNextQuestion" data-next-idx="${fallbackNextIdx}" style="height:44px; font-size:15px;">前往第 ${fallbackNextIdx + 1} 題 ➔</button>`
+        : (p.solved && getSolvedCount() === 20
+          ? `<button type="button" class="btn-primary btn-amber" id="btnViewCertNow" style="height:44px; font-size:15px;">🏆 領取通關證書</button>`
+          : '');
+
+      if (q.isImproper) {
+        // 合併 1 想法雲朵僅在開啟錦囊後顯示
+        const thoughtCloudBlock = p.hintUsed
+          ? `
+            <div class="thought-cloud-box">
+              <span class="thought-cloud-tag">☁️ 想法：滿 ${q.redDen}/${q.redDen} 合併成「1」</span>
+              ${buildMixedThoughtHTML(q, p.solved)}
+            </div>
+          `
+          : `
+            <div style="font-size:12.5px; font-weight:800; color:var(--muted); text-align:center; background:#fff; padding:7px 10px; border-radius:10px; border:1px dashed var(--border);">
+              想想看：${q.redNum} 個 ${vfracHTML(1, q.redDen)} 裡面有幾個「1」和餘下幾分之幾？（需要提示可按左側「錦囊」）
+            </div>
+          `;
+
+        const improperStageHTML = !p.improperVerified
+          ? `
+            <div style="font-size:13px; font-weight:800; color:var(--muted); text-align:center;">
+              先計算出假分數：
+            </div>
+            <div class="mixed-builder">
+              <div class="frac-input-stack">
+                <input class="num-box" id="inpImpNum" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="分子" value="${p.impNumInput}">
+                <span class="frac-bar-line"></span>
+                <input class="num-box" id="inpImpDen" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="分母" value="${p.impDenInput}">
+              </div>
+            </div>
+            <button type="button" class="btn-primary btn-orange" id="btnCheckImproper" style="height:44px; font-size:15px;">確認假分數 ➔</button>
+          `
+          : `
+            <div style="display:flex; align-items:center; justify-content:center; gap:8px; font-size:18px; font-weight:900;">
+              <span style="font-size:13px; color:var(--muted);">假分數：</span>
+              ${vfracHTML(q.redNum, q.redDen)}
+              <span style="color:var(--green); font-size:14px;">✓</span>
+            </div>
+            ${thoughtCloudBlock}
+            <div style="font-size:13px; font-weight:800; color:var(--muted); text-align:center;">
+              寫出最後帶分數答案：
+            </div>
+            <div class="mixed-builder">
+              <input class="num-box whole-box" id="inpAnsWhole" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="整數" value="${p.ansWholeInput}" ${p.solved ? 'disabled' : ''}>
+              <div class="frac-input-stack">
+                <input class="num-box" id="inpAnsNum" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="分子" value="${p.ansNumInput}" ${p.solved ? 'disabled' : ''}>
+                <span class="frac-bar-line"></span>
+                <input class="num-box" id="inpAnsDen" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="分母" value="${p.ansDenInput}" ${p.solved ? 'disabled' : ''}>
+              </div>
+              ${q.unit ? `<span style="font-size:16px; font-weight:850;">${q.unit}</span>` : ''}
+            </div>
+            ${!p.solved ? `<button type="button" class="btn-primary btn-green" id="btnSubmitAns" style="height:46px; font-size:16px;">提交最終答案 ✓</button>` : ''}
+            ${nextBtnHTML}
+          `;
+
+        blocks.push(`
+          <div class="${ansBoxCls}">
+            <div class="step-head">
+              <span class="step-label"><span class="step-num">${sAnsNum}</span>計算結果並寫出答案</span>
+              ${p.solved ? '<span style="color:var(--green); font-weight:850; font-size:13px;">✅ 完成</span>' : ''}
+            </div>
+            ${improperStageHTML}
+          </div>
+        `);
+      } else {
+        blocks.push(`
+          <div class="${ansBoxCls}">
+            <div class="step-head">
+              <span class="step-label"><span class="step-num">${sAnsNum}</span>計算結果並寫出答案</span>
+              ${p.solved ? '<span style="color:var(--green); font-weight:850; font-size:13px;">✅ 完成</span>' : ''}
+            </div>
+            <div class="mixed-builder">
+              <div class="frac-input-stack">
+                <input class="num-box" id="inpAnsNum" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="分子" value="${p.ansNumInput}" ${p.solved ? 'disabled' : ''}>
+                <span class="frac-bar-line"></span>
+                <input class="num-box" id="inpAnsDen" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="分母" value="${p.ansDenInput}" ${p.solved ? 'disabled' : ''}>
+              </div>
+              ${q.unit ? `<span style="font-size:16px; font-weight:850;">${q.unit}</span>` : ''}
+            </div>
+            ${!p.solved ? `<button type="button" class="btn-primary btn-green" id="btnSubmitAns" style="height:46px; font-size:16px;">提交最終答案 ✓</button>` : ''}
+            ${nextBtnHTML}
+          </div>
+        `);
+      }
+
+      if (p.feedback) {
+        blocks.push(`<p class="feedback-msg ${p.feedbackType || 'info'}">${p.feedback}</p>`);
+      }
+
+      col.innerHTML = blocks.join('');
+
+      // 綁定輸入框
+      const bindInput = (id, field) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.oninput = () => {
+          p[field] = el.value.replace(/[^\d]/g, '');
+          el.value = p[field];
+        };
+      };
+      bindInput('inpEqNum', 'eqNumInput');
+      bindInput('inpEqDen', 'eqDenInput');
+      bindInput('inpEqInt', 'eqIntInput');
+      bindInput('inpFNum1', 'fNum1Input');
+      bindInput('inpFNum2', 'fNum2Input');
+      bindInput('inpFDen', 'fDenInput');
+      bindInput('inpImpNum', 'impNumInput');
+      bindInput('inpImpDen', 'impDenInput');
+      bindInput('inpAnsWhole', 'ansWholeInput');
+      bindInput('inpAnsNum', 'ansNumInput');
+      bindInput('inpAnsDen', 'ansDenInput');
+
+      // 步驟 1：檢查應用題列式
+      const btnCheckEq = document.getElementById('btnCheckEq');
+      if (btnCheckEq) {
+        btnCheckEq.onclick = () => {
+          const en = Number(p.eqNumInput);
+          const ed = Number(p.eqDenInput);
+          const ei = Number(p.eqIntInput);
+          if (en === q.n && ed === q.d && ei === q.k) {
+            p.eqVerified = true;
+            p.feedback = '✅ 列式正確！請在下一步寫出「分子 × 整數 / 分母」。';
+            p.feedbackType = 'ok';
+          } else if (en === q.k && ed === 1 && ei === q.n) {
+            p.feedback = `💡 提示：每份是 ${q.n}/${q.d}，共有 ${q.k} 份，請把真分數 ${q.n}/${q.d} 放在前面，整數 ${q.k} 放在後面！`;
+            p.feedbackType = 'err';
+          } else {
+            p.feedback = `❌ 算式未正確喔！再讀一讀題目：每份是 ${q.n}/${q.d}，共有 ${q.k} 份。`;
+            p.feedbackType = 'err';
+          }
+          renderPracticeWorkspace();
+        };
+      }
+
+      // 步驟 2：檢查「分子 × 整數 / 分母」
+      const btnCheckFormula = document.getElementById('btnCheckFormula');
+      if (btnCheckFormula) {
+        btnCheckFormula.onclick = () => {
+          const fn1 = Number(p.fNum1Input);
+          const fn2 = Number(p.fNum2Input);
+          const fd = Number(p.fDenInput);
+          if (fn1 === q.n && fn2 === q.k && fd === q.d) {
+            p.formulaVerified = true;
+            p.stage = 'merged';
+            if (q.reduceFactor > 1) {
+              p.feedback = '✅ 算式正確！現在請直接在算式中點選數字進行約簡。';
+            } else if (q.isImproper) {
+              p.feedback = '✅ 算式正確！請計算分子並輸入假分數。';
+            } else {
+              p.feedback = '✅ 算式正確！請在下方輸入最終答案。';
+            }
+            p.feedbackType = 'ok';
+          } else if (fn1 === q.k && fn2 === q.n && fd === q.d) {
+            p.feedback = `💡 雖然乘法結果相同，但請依照「分子(${q.n}) × 整數(${q.k})」的順序填寫喔！`;
+            p.feedbackType = 'err';
+          } else {
+            p.feedback = `❌ 未正確喔！真分數乘以整數時，分子(${q.n})乘以整數(${q.k})，分母(${q.d})不變。`;
+            p.feedbackType = 'err';
+          }
+          renderPracticeWorkspace();
+        };
+      }
+
+      // 步驟 3：點選數字約簡互動事件
+      const btnN1 = document.getElementById('btnCancelN1');
+      if (btnN1) {
+        btnN1.onclick = () => {
+          p.selectedNumSlot = (p.selectedNumSlot === 'n1') ? null : 'n1';
+          p.denSelected = false;
+          p.cancelDivInput = '';
+          p.reduceHint = p.selectedNumSlot ? `已選取分子「${p.curN1}」，請點選下方分母「${p.curDen}」` : '';
+          renderPracticeWorkspace();
+        };
+      }
+      const btnN2 = document.getElementById('btnCancelN2');
+      if (btnN2) {
+        btnN2.onclick = () => {
+          p.selectedNumSlot = (p.selectedNumSlot === 'n2') ? null : 'n2';
+          p.denSelected = false;
+          p.cancelDivInput = '';
+          p.reduceHint = p.selectedNumSlot ? `已選取分子「${p.curN2}」，請點選下方分母「${p.curDen}」` : '';
+          renderPracticeWorkspace();
+        };
+      }
+      const btnDen = document.getElementById('btnCancelDen');
+      if (btnDen) {
+        btnDen.onclick = () => {
+          if (!p.selectedNumSlot) {
+            p.reduceHint = '👆 請先點選上方分子的其中一個數字！';
+            renderPracticeWorkspace();
+            return;
+          }
+          const numVal = p.selectedNumSlot === 'n1' ? p.curN1 : p.curN2;
+          const divs = getCommonDivisors(numVal, p.curDen);
+          if (divs.length === 0) {
+            p.reduceHint = `💡 ${numVal} 和 ${p.curDen} 沒有大於 1 的公因數，請試試點選另一個分子數字！`;
+            p.selectedNumSlot = null;
+            p.denSelected = false;
+            p.cancelDivInput = '';
+          } else {
+            p.denSelected = true;
+            p.cancelDivInput = '';
+            p.reduceHint = `已選取 ${numVal} 和 ${p.curDen}，請自行填入用「?」約簡！`;
+          }
+          renderPracticeWorkspace();
+          const inpDiv = document.getElementById('inpCancelDiv');
+          if (inpDiv) inpDiv.focus();
+        };
+      }
+
+      const submitCancelDivisor = () => {
+        if (!p.selectedNumSlot || !p.denSelected) return;
+        const numVal = p.selectedNumSlot === 'n1' ? p.curN1 : p.curN2;
+        const div = Number(p.cancelDivInput);
+        if (!Number.isInteger(div) || div <= 1) {
+          p.reduceHint = '⚠️ 請在「?」處填入大於 1 的整數喔！';
+        } else if (numVal % div !== 0 || p.curDen % div !== 0) {
+          p.reduceHint = `❌ ${numVal} 和 ${p.curDen} 不能同時用 ${div} 約簡，請再想想它們的公因數！`;
+        } else {
+          applyCancellationDivisor(q, p, p.selectedNumSlot, div);
+        }
+        renderPracticeWorkspace();
+      };
+
+      const inpCancelDiv = document.getElementById('inpCancelDiv');
+      if (inpCancelDiv) {
+        inpCancelDiv.oninput = () => {
+          p.cancelDivInput = inpCancelDiv.value.replace(/[^\d]/g, '');
+          inpCancelDiv.value = p.cancelDivInput;
+        };
+        inpCancelDiv.onkeydown = (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            submitCancelDivisor();
+          }
+        };
+      }
+      const btnApplyCancelDiv = document.getElementById('btnApplyCancelDiv');
+      if (btnApplyCancelDiv) {
+        btnApplyCancelDiv.onclick = submitCancelDivisor;
+      }
+
+      const btnFinishReduce = document.getElementById('btnFinishReduce');
+      if (btnFinishReduce) {
+        btnFinishReduce.onclick = () => {
+          const remGcd = gcd(p.curN1 * p.curN2, p.curDen);
+          if (remGcd > 1) {
+            openUnreducedPopup(`分子（${p.curN1} × ${p.curN2}）與分母（${p.curDen}）仍有公因數 ${remGcd}，未約至最簡！請在算式中繼續點選數字進行約簡。`);
+            return;
+          }
+          p.reduceVerified = true;
+          p.selectedNumSlot = null;
+          p.denSelected = false;
+          p.cancelDivInput = '';
+          p.feedback = q.isImproper
+            ? '✅ 已約至最簡！現在請計算並輸入假分數。'
+            : '✅ 已約至最簡！現在請計算並寫出最終答案。';
+          p.feedbackType = 'ok';
+          renderPracticeWorkspace();
+        };
+      }
+
+      // 步驟 4A：確認假分數
+      const btnCheckImp = document.getElementById('btnCheckImproper');
+      if (btnCheckImp) {
+        btnCheckImp.onclick = () => {
+          const inum = Number(p.impNumInput);
+          const iden = Number(p.impDenInput);
+          if (inum === q.redNum && iden === q.redDen) {
+            p.improperVerified = true;
+            p.stage = 'mixed';
+            p.feedback = `✨ 假分數 ${q.redNum}/${q.redDen} 正確！請將它化為帶分數作為最終答案。`;
+            p.feedbackType = 'ok';
+          } else if (inum === q.rawNum && iden === q.rawDen && q.reduceFactor > 1) {
+            p.feedback = `💡 這是未約簡前的假分數喔！請依照約簡後的算式（${p.curN1} × ${p.curN2} / ${p.curDen}）計算。`;
+            p.feedbackType = 'err';
+          } else {
+            p.feedback = `❌ 假分數未正確喔！請把分子（${p.curN1} × ${p.curN2}）乘出來，分母保持 ${q.redDen}。`;
+            p.feedbackType = 'err';
+          }
+          renderPracticeWorkspace();
+        };
+      }
+
+      // 步驟 4B：提交最終答案
+      const btnSubmit = document.getElementById('btnSubmitAns');
+      if (btnSubmit) {
+        btnSubmit.onclick = () => {
+          const aw = q.isImproper ? Number(p.ansWholeInput || 0) : 0;
+          const an = Number(p.ansNumInput || 0);
+          const ad = Number(p.ansDenInput || 0);
+
+          if (q.isImproper && aw === 0 && an === q.redNum && ad === q.redDen) {
+            p.feedback = `💡 請把假分數 ${q.redNum}/${q.redDen} 轉換成帶分數喔！`;
+            p.feedbackType = 'err';
+          } else if (aw === q.ansWhole && an === q.ansNum && ad === q.ansDen) {
+            p.solved = true;
+            const totalDone = getSolvedCount();
+            if (totalDone === 20) {
+              p.feedback = '🎉 恭喜你完成全部 20 題挑戰！通關證書已為你準備好！';
+              p.feedbackType = 'ok';
+              renderPracticeWorkspace();
+              if (!state.certShownOnce) {
+                state.certShownOnce = true;
+                setTimeout(() => openCertificateModal(), 450);
+              }
+              return;
+            } else {
+              p.feedback = `🎉 答對了！已完成 ${totalDone} / 20 題，繼續加油！`;
+              p.feedbackType = 'ok';
+              showToast(`🎉 第 ${state.currentQ + 1} 題答對！（${totalDone}/20）`);
+            }
+          } else {
+            p.feedback = q.isImproper
+              ? `❌ 帶分數未正確喔！再算算 ${q.redNum} ÷ ${q.redDen} 的商和餘數。`
+              : `❌ 答案未正確，請再計算 ${p.curN1} × ${p.curN2} / ${p.curDen}！`;
+            p.feedbackType = 'err';
+          }
+          renderPracticeWorkspace();
+        };
+      }
+
+      const btnNext = document.getElementById('btnNextQuestion');
+      if (btnNext) {
+        btnNext.onclick = () => {
+          state.currentQ = Number(btnNext.dataset.nextIdx);
+          renderPracticeWorkspace();
+        };
+      }
+
+      const btnCertNow = document.getElementById('btnViewCertNow');
+      if (btnCertNow) {
+        btnCertNow.onclick = () => openCertificateModal();
+      }
+    }
+
+    /* =========================================================================
+       6. 通關證書（0 題用錦囊 -> 金色證書；>= 1 題用錦囊 -> 銀色證書）& 圖片匯出
+       ========================================================================= */
+    function openCertificateModal() {
+      const hintCount = getHintUsedCount();
+      const isGold = (hintCount === 0);
+
+      const paper = document.getElementById('certificatePaper');
+      paper.className = 'certificate-paper ' + (isGold ? 'gold' : 'silver');
+
+      document.getElementById('certMedal').textContent = isGold ? '🏆' : '🥈';
+      document.getElementById('certRibbon').textContent = isGold
+        ? '小學五年級數學・零錦囊榮譽金獎'
+        : '小學五年級數學・自主探究白銀獎';
+      document.getElementById('certTitle').textContent = isGold
+        ? '黃金通關證書'
+        : '白銀通關證書';
+
+      document.getElementById('certStudentName').textContent = state.studentName || '優秀同學';
+      document.getElementById('certHintSummary').innerHTML = isGold
+        ? `<span>🌟</span><span><strong>0 題</strong>用了錦囊（全憑獨立思考完成！）</span>`
+        : `<span>💡</span><span><strong>${hintCount} 題</strong>用了錦囊（共完成 20 題挑戰！）</span>`;
+
+      document.getElementById('certClassTag').textContent = state.studentClass
+        ? `班別／學號：${state.studentClass}`
+        : '在家自主練習版';
+
+      const now = new Date();
+      document.getElementById('certDateText').textContent = `頒發日期：${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日`;
+
+      document.getElementById('certModal').hidden = false;
+    }
+
+    // 使用 HTML5 Canvas 繪製高解析度通關證書並下載 PNG
+    function downloadCertificatePNG() {
+      const hintCount = getHintUsedCount();
+      const isGold = (hintCount === 0);
+      const canvas = document.createElement('canvas');
+      canvas.width = 1200;
+      canvas.height = 840;
+      const ctx = canvas.getContext('2d');
+
+      // 背景漸層
+      const bgGrad = ctx.createRadialGradient(600, 180, 60, 600, 420, 720);
+      if (isGold) {
+        bgGrad.addColorStop(0, '#fffdf4');
+        bgGrad.addColorStop(0.55, '#fef3c7');
+        bgGrad.addColorStop(1, '#fde68a');
+      } else {
+        bgGrad.addColorStop(0, '#ffffff');
+        bgGrad.addColorStop(0.55, '#f1f5f9');
+        bgGrad.addColorStop(1, '#e2e8f0');
+      }
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, 1200, 840);
+
+      // 外框與內虛線框
+      ctx.strokeStyle = isGold ? '#d97706' : '#64748b';
+      ctx.lineWidth = 22;
+      ctx.strokeRect(24, 24, 1152, 792);
+
+      ctx.strokeStyle = isGold ? '#fbbf24' : '#cbd5e1';
+      ctx.lineWidth = 6;
+      ctx.strokeRect(42, 42, 1116, 756);
+
+      ctx.save();
+      ctx.setLineDash([12, 10]);
+      ctx.strokeStyle = isGold ? '#d97706' : '#64748b';
+      ctx.lineWidth = 3;
+      ctx.strokeRect(62, 62, 1076, 716);
+      ctx.restore();
+
+      ctx.textAlign = 'center';
+
+      // 獎章圖示
+      ctx.font = '76px sans-serif';
+      ctx.fillText(isGold ? '🏆' : '🥈', 600, 165);
+
+      // 橫幅徽章
+      ctx.fillStyle = isGold ? '#b45309' : '#334155';
+      ctx.beginPath();
+      ctx.roundRect(360, 192, 480, 44, 22);
+      ctx.fill();
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 22px "PingFang TC", "Microsoft JhengHei", sans-serif';
+      ctx.fillText(isGold ? '小學五年級數學・零錦囊榮譽金獎' : '小學五年級數學・自主探究白銀獎', 600, 222);
+
+      // 主標題
+      ctx.fillStyle = isGold ? '#92400e' : '#1e293b';
+      ctx.font = '900 58px "PingFang TC", "Microsoft JhengHei", sans-serif';
+      ctx.fillText(isGold ? '黃金通關證書' : '白銀通關證書', 600, 305);
+
+      // 學生姓名
+      ctx.fillStyle = isGold ? '#78350f' : '#334155';
+      ctx.font = 'bold 26px "PingFang TC", "Microsoft JhengHei", sans-serif';
+      ctx.fillText('特此嘉許', 600, 355);
+
+      const stuName = state.studentName || '優秀同學';
+      ctx.fillStyle = isGold ? '#451a03' : '#0f172a';
+      ctx.font = '900 48px "PingFang TC", "Microsoft JhengHei", sans-serif';
+      ctx.fillText(`${stuName} 同學`, 600, 422);
+
+      ctx.strokeStyle = isGold ? '#d97706' : '#64748b';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(390, 438);
+      ctx.lineTo(810, 438);
+      ctx.stroke();
+
+      // 內文描述
+      ctx.fillStyle = isGold ? '#78350f' : '#1e293b';
+      ctx.font = 'bold 25px "PingFang TC", "Microsoft JhengHei", sans-serif';
+      ctx.fillText('順利完成 20 題「真分數 × 整數」綜合挑戰', 600, 495);
+      ctx.font = '22px "PingFang TC", "Microsoft JhengHei", sans-serif';
+      ctx.fillText('（涵蓋基本乘法、先約簡再相乘、假分數化帶分數及生活應用題）', 600, 535);
+
+      // 錦囊使用紀錄框
+      ctx.fillStyle = '#ffffff';
+      ctx.strokeStyle = isGold ? '#f59e0b' : '#94a3b8';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.roundRect(350, 572, 500, 68, 20);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = isGold ? '#92400e' : '#334155';
+      ctx.font = '900 30px "PingFang TC", "Microsoft JhengHei", sans-serif';
+      ctx.fillText(isGold ? '🌟 0 題用了錦囊' : `💡 ${hintCount} 題用了錦囊`, 600, 616);
+
+      // 底部資訊
+      const now = new Date();
+      const dateStr = `頒發日期：${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日`;
+      const clsStr = state.studentClass ? `班別／學號：${state.studentClass}` : '小五分數乘以整數・在家自主練習版';
+      ctx.font = 'bold 21px "PingFang TC", "Microsoft JhengHei", sans-serif';
+      ctx.fillStyle = isGold ? '#92400e' : '#475569';
+      ctx.textAlign = 'left';
+      ctx.fillText(clsStr, 105, 735);
+      ctx.textAlign = 'right';
+      ctx.fillText(dateStr, 1095, 735);
+
+      const link = document.createElement('a');
+      link.download = `${stuName}_分數乘以整數_${isGold ? '黃金' : '白銀'}通關證書.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      showToast('💾 已儲存通關證書圖片！');
+    }
+
+    /* =========================================================================
+       7. 按鈕事件綁定
+       ========================================================================= */
+    document.getElementById('btnStartPractice').onclick = () => {
+      const name = document.getElementById('stuNameInput').value.trim();
+      const cls = document.getElementById('stuClassInput').value.trim();
+      if (!name) {
+        showToast('請先輸入你的姓名，方便印在通關證書上！');
+        document.getElementById('stuNameInput').focus();
+        return;
+      }
+      startPracticeSession(name, cls);
+    };
+
+    document.getElementById('btnRestartAll').onclick = () => {
+      startPracticeSession(state.studentName, state.studentClass);
+      showToast('已為你重新產生一套全新的 20 題挑戰！');
+    };
+
+    document.getElementById('btnOpenCertTop').onclick = () => openCertificateModal();
+    document.getElementById('btnDownloadCert').onclick = () => downloadCertificatePNG();
+    document.getElementById('btnNewRoundCert').onclick = () => {
+      startPracticeSession(state.studentName, state.studentClass);
+      showToast('已開始全新一輪 20 題挑戰！');
+    };
+    document.getElementById('btnCloseCert').onclick = () => {
+      document.getElementById('certModal').hidden = true;
+    };
+
+    document.getElementById('btnCloseWarnModal').onclick = () => {
+      document.getElementById('unreducedWarnModal').hidden = true;
+    };
+    document.getElementById('unreducedWarnModal').onclick = (e) => {
+      if (e.target.id === 'unreducedWarnModal') {
+        document.getElementById('unreducedWarnModal').hidden = true;
+      }
+    };
+  </script>
+</body>
+</html>
